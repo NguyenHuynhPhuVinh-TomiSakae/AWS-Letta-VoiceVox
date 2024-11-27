@@ -1,0 +1,34 @@
+ssh -i "VoiceVox.pem" ubuntu@Public IPv4 DNS
+sudo apt update && sudo apt upgrade -y
+
+scp -i "VoiceVox.pem" -r linux-cpu ubuntu@Public IPv4 DNS:~
+ssh -i "VoiceVox.pem" ubuntu@Public IPv4 DNS
+
+ls ~
+cd ~/linux-cpu
+ls
+chmod +x run
+./run --host 0.0.0.0
+
+Đảm bảo Security Group của EC2 instance cho phép lưu lượng vào cổng 8283:
+Vào AWS Console, chọn EC2 > Security Groups.
+
+Chọn Security Group mà instance của bạn đang sử dụng.
+
+Trong tab Inbound Rules, thêm một rule cho phép truy cập vào cổng 50021 từ bất kỳ đâu (hoặc IP cụ thể nếu muốn bảo mật):
+
+Type: Custom TCP Rule
+Port Range: 50021
+Source: 0.0.0.0/0 (hoặc giới hạn theo IP của bạn).
+sudo ufw status
+sudo ufw allow 50021
+sudo ufw reload
+sudo ufw status
+
+sudo apt install tmux
+tmux new -s Letta
+tmux attach -t Letta
+
+Ctrl + b, sau đó nhấn d
+
+http://ip4:50021

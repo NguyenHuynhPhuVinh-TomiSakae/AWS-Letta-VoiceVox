@@ -1,0 +1,35 @@
+ssh -i "Letta.pem" ubuntu@Public IPv4 DNS
+
+sudo apt update
+sudo apt install -y python3 python3-pip
+sudo apt update
+sudo apt install -y python3-venv
+
+python3 -m venv letta-env
+source letta-env/bin/activate
+
+sudo apt install tmux
+tmux new -s Letta
+
+pip install letta
+letta server --host 0.0.0.0
+Đảm bảo Security Group của EC2 instance cho phép lưu lượng vào cổng 8283:
+Vào AWS Console, chọn EC2 > Security Groups.
+
+Chọn Security Group mà instance của bạn đang sử dụng.
+
+Trong tab Inbound Rules, thêm một rule cho phép truy cập vào cổng 8283 từ bất kỳ đâu (hoặc IP cụ thể nếu muốn bảo mật):
+
+Type: Custom TCP Rule
+Port Range: 8283
+Source: 0.0.0.0/0 (hoặc giới hạn theo IP của bạn).
+sudo ufw status
+sudo ufw allow 8283
+sudo ufw reload
+sudo ufw status
+
+tmux attach -t Letta
+source letta-env/bin/activate
+Ctrl + b, sau đó nhấn d
+
+http://ip4:8283
